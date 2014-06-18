@@ -10,19 +10,28 @@ module LinkedIn
   end
 
   def authorization_url
-    "#{base_url}#{auth_request_params}"
+    "#{oauth_base_url}#{auth_request_params}"
   end
 
   def get_access_token authorization_code
     params = uri_encode access_token_params(authorization_code)
-    response = HTTParty.get "#{base_url}accessToken?#{params}"
+    response = HTTParty.get "#{oauth_base_url}accessToken?#{params}"
     response.parsed_response["access_token"]
+  end
+  
+  def user_profile access_token
+    profile = HTTParty.get "#{api_base_url}/people/~?oauth2_access_token=#{access_token}"
+    profile.parsed_response["person"]
   end
 
   private
   
-  def base_url
+  def oauth_base_url
     "https://www.linkedin.com/uas/oauth2/"
+  end
+  
+  def api_base_url
+    "https://api.linkedin.com/v1"
   end
 
   def access_token_params authorization_code
