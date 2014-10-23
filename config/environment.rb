@@ -20,7 +20,6 @@ require "sinatra/reloader" if development?
 
 require 'erb'
 
-require 'debugger'
 require 'httparty'
 
 # Some helper constants for path-centric logic
